@@ -1,0 +1,45 @@
+package addressbook::Controller::Resty;
+use Moose;
+use namespace::autoclean;
+
+BEGIN { extends 'Catalyst::Controller::REST'; }
+
+sub thing : Local : ActionClass('REST') { }
+
+sub thing_GET {
+	 my ( $self, $c ) = @_;
+	
+	 # Return a 200 OK, with the data in entity
+	 # serialized in the body
+	 $self->status_ok(
+	      $c,
+	      entity => {
+	          some => 'data',
+	          foo  => 'is real bar-y',
+	      },
+	 );
+}
+
+
+__PACKAGE__->config(
+	'default' => 'text/xml',
+	'stash_key' => 'rest',
+	'map'       => {
+	   'text/html'          => 'YAML::HTML',
+	   'text/xml'           => 'XML::Simple',
+	   'text/x-yaml'        => 'YAML',
+	   'application/json'   => 'JSON',
+	   'text/x-json'        => 'JSON',
+	   'text/x-data-dumper' => [ 'Data::Serializer', 'Data::Dumper' ],
+	   'text/x-data-denter' => [ 'Data::Serializer', 'Data::Denter' ],
+	   'text/x-data-taxi'   => [ 'Data::Serializer', 'Data::Taxi'   ],
+	   'application/x-storable'   => [ 'Data::Serializer', 'Storable' ],
+	   'application/x-freezethaw' => [ 'Data::Serializer', 'FreezeThaw' ],
+	   'text/x-config-general'    => [ 'Data::Serializer', 'Config::General' ],
+	   'text/x-php-serialization' => [ 'Data::Serializer', 'PHP::Serialization' ],
+	},
+);
+
+__PACKAGE__->meta->make_immutable;
+
+1;

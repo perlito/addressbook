@@ -1,0 +1,40 @@
+*.* {
+	padding: 0;
+	margin: 0;
+}
+body {
+	
+}
+
+header {
+	display: block;
+	margin auto 100px;
+}
+
+section table{
+	background: black;
+	width: 960px;
+}
+
+section table td, section table th {
+	padding: 3px;
+	background: white;
+}
+
+#main {
+	display: block;	
+}
+
+td div {
+	display: block;
+	margin-bottom: 10px;
+	margin-top: 5px;
+}
+
+a {
+	color: #4c8bc0;
+}
+
+input[type=text]{
+	width: 250px;
+}

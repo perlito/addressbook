@@ -1,0 +1,73 @@
+package addressbook::Controller::My;
+use Moose;
+use namespace::autoclean;
+
+BEGIN {  extends 'Catalyst::Controller::REST' }
+
+sub begin : Private {
+	my ( $self , $c ) = @_;
+	
+	$c->forward('deserialize');
+}
+
+
+sub user :Local :ActionCLass('REST') :Args(1){
+	my( $self, $c, $id ) = @_;
+	
+	$c->stash( id => $id );
+	
+}
+
+
+# Get user
+sub user_GET {
+	my ( $self, $c ) = @_;
+	
+	my $user = $c->model('DB::User')->find( { id => $c->stash->{id} } );
+	
+	if ( $user ){
+			$self->status_ok($c, entity => { firstname => $user->firstname } );	
+	}
+	else {
+			$self->status_not_found($c, message => 'No matching user');	
+	}
+}
+
+
+# Create new user 
+sub user_POST {
+	my ( $self, $c ) = @_;
+	
+	#$self->check_user($c);
+	my $user = $c->model('DB::User')->create({
+															login => $c->req->data->{login},
+															password => $c->req->data->{password},
+															firstname => $c->req->data->{firstname},
+															lastname => $c->req->data->{lastname},																	
+															});
+	#my $id = $user->id;
+	$self->status_ok($c, message => "ok" );												
+}
+
+ 
+
+
+sub user_GET {
+	my ( $self, $c ) = @_;
+	
+}
+
+sub deserialize : ActionClass('Deserialize') {}
+
+sub end :Private {
+	my ($self, $c) = @_;
+
+	$c->forward('serialize');
+
+}
+
+sub serialize : ActionClass('Serialize') {}
+
+__PACKAGE__->config(default => 'text/html');
+
+1;

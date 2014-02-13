@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>adressbook</title>
+		<link rel="stylesheet" type="text/css" href="[% c.uri_for('../static/css/style.css') %]" />
+		<script type="text/javascript" src="[% base %]static/js/jquery.js"></script>
+		<script type="text/javascript" src="[% base %]static/js/home.js"></script>
+	</head>
+	<body>
+		<header>
+				<div id="error"></div>
+				<div id="edit_user">
+							
+				</div>
+		</header>
+		
+		<section id="search_section">
+				<form onsubmit="Search();return false;">
+					<input type="text" name="search" id="search"> &nbsp;<input type="submit" value="Найти">
+				</form>
+		</section>
+		
+		<section id="main">
+					
+		</section>
+		
+		<footer>
+		
+		</footer>
+	</body>
+</html>

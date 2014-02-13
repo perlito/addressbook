@@ -1,0 +1,92 @@
+package addressbook::Controller::REST;
+use Moose;
+use namespace::autoclean;
+
+BEGIN {  extends 'Catalyst::Controller::REST' }
+=head2
+sub begin : Private {
+	my ( $self , $c ) = @_;
+	
+	$c->forward('deserialize');
+}
+=cut
+
+sub user :Local :ActionCLass('REST') {
+	my( $self, $c ) = @_;
+	$c->log->debug("*** here ***");
+	#$c->stash( id => $id );
+	
+	#$c->log->debug("*** here 3 => $id ***");
+}
+
+
+# Get user
+sub user_GET {
+	my ( $self, $c ) = @_;
+	$c->log->debug("*** here2 ***");
+	my $user = $c->model('DB::User')->find( { id => $c->stash->{id} } );
+	
+	$c->log->debug("*** id is " . $c->stash->{id} . " firstname is " . $user->firstname);
+	$self->status_ok($c, entity => { firstname => "tigran" } );
+=head2	
+	if ( $user ){
+			$self->status_ok($c, entity => { firstname => "tigran" } );	
+	}
+	else {
+			$self->status_not_found($c, message => 'No matching user');	
+	}
+=cut	
+}
+
+
+# Create new user 
+sub user_POST {
+	my ( $self, $c ) = @_;
+	
+	#$self->check_user($c);
+	my $user = $c->model('DB::User')->create({
+															login => $c->req->data->{login},
+															password => $c->req->data->{password},
+															firstname => $c->req->data->{firstname},
+															lastname => $c->req->data->{lastname},																	
+															});
+	#my $id = $user->id;
+	$self->status_ok($c, message => "ok" );												
+}
+
+=head2
+sub deserialize : ActionClass('Deserialize') {}
+
+sub end :Private {
+	my ($self, $c) = @_;
+
+	$c->forward('serialize');
+
+}
+
+sub serialize : ActionClass('Serialize') {}
+
+#__PACKAGE__->config( json_options => { relaxed => 1 } );
+#__PACKAGE__->config(default => 'text/x-yaml');
+=cut
+
+__PACKAGE__->config(
+	'default' => 'text/xml',
+	'stash_key' => 'rest',
+	'map'       => {
+	   'text/html'          => 'YAML::HTML',
+	   'text/xml'           => 'XML::Simple',
+	   'text/x-yaml'        => 'YAML',
+	   'application/json'   => 'JSON',
+	   'text/x-json'        => 'JSON',
+	   'text/x-data-dumper' => [ 'Data::Serializer', 'Data::Dumper' ],
+	   'text/x-data-denter' => [ 'Data::Serializer', 'Data::Denter' ],
+	   'text/x-data-taxi'   => [ 'Data::Serializer', 'Data::Taxi'   ],
+	   'application/x-storable'   => [ 'Data::Serializer', 'Storable' ],
+	   'application/x-freezethaw' => [ 'Data::Serializer', 'FreezeThaw' ],
+	   'text/x-config-general'    => [ 'Data::Serializer', 'Config::General' ],
+	   'text/x-php-serialization' => [ 'Data::Serializer', 'PHP::Serialization' ],
+	},
+);
+
+1;

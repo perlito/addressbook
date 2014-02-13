@@ -1,0 +1,41 @@
+package addressbook::View::Jemplate;
+
+use strict;
+use base 'Catalyst::View::Jemplate';
+
+=head1 NAME
+
+addressbook::View::Jemplate - Jemplate View for addressbook
+
+=head1 DESCRIPTION
+
+Jemplate View for addressbook. 
+
+=head1 AUTHOR
+
+__PACKAGE__->config({
+
+	INCLUDE_PATH => [
+							addressbook->path_to( 'root', 'jemplate'),
+							addressbook->path_to( 'root', 'src' ),	
+							addressbook->path_to( 'root', 'lib' ),	
+	],
+
+});
+
+
+
+=head1 SEE ALSO
+
+L<addressbook>
+
+tigran,,,
+
+=head1 LICENSE
+
+This library is free software, you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
+
+1;
